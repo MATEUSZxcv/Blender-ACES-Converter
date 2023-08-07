@@ -16,22 +16,8 @@ import os
 from bpy.types import Operator
 from bpy.types import Panel
 
-class TLA_OT_operator(Operator):
-    """ click """
-    bl_idname = "demo.operator"
-    bl_label = "I'm a Skeleton Operator"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-
-        self.report({'INFO'},
-            f"execute()")
-
-        #getting blendfile directory
+def Function1(self, context):
+    #getting blendfile directory
         filepath = bpy.data.filepath
         directory = os.path.dirname(filepath)
         print(directory)
@@ -76,22 +62,66 @@ class TLA_OT_operator(Operator):
             f.close()
             os.remove(tmp_path)
 
+def Function2(self, context):
+    filepath = bpy.data.filepath
+    directory = os.path.dirname(filepath)
+    print(directory)
+    tmp_path = os.path.join( directory , "A.txt")
+    #creating file
+    f=open(tmp_path,'a')
+    f.close()
+
+class TLA_OT_operator(Operator):
+    """ tooltip goes here """
+    bl_idname = "demo.operator"
+    bl_label = "I'm a Skeleton Operator"
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+
+        self.report({'INFO'},
+            f"execute()")
+        Function1(self, context)
         return {'FINISHED'}
+    
+class TLA_OT_operator2(Operator):
+    """ tooltip goes here """
+    bl_idname = "demo.operator2"
+    bl_label = "I'm a Skeleton Operator2"
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+
+        self.report({'INFO'},
+            f"execute2()")
+        Function2(self, context)
+        return {'FINISHED'}
+
 
 class TLA_PT_sidebar(Panel):
     """Display test button"""
-    bl_label = "Aces Conversion"
+    bl_label = "TLA"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "Tool"
+    bl_category = "TLA"
 
     def draw(self, context):
         col = self.layout.column(align=True)
-        prop = col.operator(TLA_OT_operator.bl_idname, text="Convert")
+        prop = col.operator(TLA_OT_operator.bl_idname, text="Say Something")
+        prop2 = col.operator(TLA_OT_operator2.bl_idname, text="Say Something2")
 
  
 classes = [
     TLA_OT_operator,
+    TLA_OT_operator2,
     TLA_PT_sidebar,
 ]
 
