@@ -18,58 +18,49 @@ from bpy.types import Panel
 
 def Function1(self, context):
     #getting blendfile directory
-        filepath = bpy.data.filepath
-        directory = os.path.dirname(filepath)
-        print(directory)
+    filepath = bpy.data.filepath
+    directory = os.path.dirname(filepath)
+    print(directory)
 
-        tmp_path = os.path.join( directory , "tmp.txt")
+    tmp_path = os.path.join( directory , "tmp.txt")
 
-        #creating file
-        f=open(tmp_path,'a')
-        f.close()
-        #openig file
-        f=open(tmp_path,'r+')
-
-        try:
-            mode = int(f.readline())
-        except:
-            mode = 0
-            
-        if mode == 0:
-            f.write("1\n")
-            for m in bpy.data.images:
-                f.write(m.colorspace_settings.name+"\n")
-            f.close()
-            
-        else:
-            color = f.read().splitlines()
-                
-            i = 0
-            for m in bpy.data.images:
-                if i == len(color):
-                    break
-                if color[i] == "sRGB":
-                    m.colorspace_settings.name = 'role_matte_paint'
-                elif color[i] == "Non-Color":
-                    m.colorspace_settings.name = 'role_data'
-                elif color[i] == "Linear":
-                    m.colorspace_settings.name = 'Utility - Linear - sRGB'
-                i = i+1
-                
-            f.close()
-            #deleting file
-            f=open(tmp_path,'w')
-            f.close()
-            os.remove(tmp_path)
-
+    #creating file
+    f=open(tmp_path,'a')
+    f.close()
+    #openig file
+    f=open(tmp_path,'r+')
+        
+    f.write("1\n")
+    for m in bpy.data.images:
+        f.write(m.colorspace_settings.name+"\n")
+    f.close()
+        
 def Function2(self, context):
     filepath = bpy.data.filepath
     directory = os.path.dirname(filepath)
     print(directory)
-    tmp_path = os.path.join( directory , "A.txt")
-    #creating file
-    f=open(tmp_path,'a')
+    tmp_path = os.path.join( directory , "tmp.txt")
+    
+    f=open(tmp_path, 'r')
+    color = f.read().splitlines()
+        
+    i = 0
+    for m in bpy.data.images:
+        if i == len(color):
+            break
+        if color[i] == "sRGB":
+            m.colorspace_settings.name = 'role_matte_paint'
+        elif color[i] == "Non-Color":
+            m.colorspace_settings.name = 'role_data'
+        elif color[i] == "Linear":
+            m.colorspace_settings.name = 'Utility - Linear - sRGB'
+        i = i+1
+        
     f.close()
+    #deleting file
+    f=open(tmp_path,'w')
+    f.close()
+    os.remove(tmp_path)
 
 class TLA_OT_operator(Operator):
     """ tooltip goes here """
