@@ -1,6 +1,6 @@
 bl_info = {
-    "name" : "ACES conversion",
-    "description" : "Addon converts to ACES",
+    "name" : "ACES Converter",
+    "description" : "Script changing all images' colorspaces to their ACES counterparts.",
     "author" : "Mateusz Kuc",
     "version" : (1, 0, 0),
     "blender" : (3, 2, 0),
@@ -8,7 +8,7 @@ bl_info = {
     "warning" : "",
     "support" : "COMMUNITY",
     "doc_url" : "",
-    "category" : "3D View"
+    "category" : "Tool"
 }
 
 import bpy
@@ -51,10 +51,10 @@ def LoadColorSpaces(self, context):
     f.close()
     os.remove(tmp_path)
 
-class TLA_OT_operator(Operator):
-    """ tooltip goes here """
-    bl_idname = "demo.operator"
-    bl_label = "I'm a Skeleton Operator"
+class Save_operator(Operator):
+    """ Save colorspaces """
+    bl_idname = "save.operator"
+    bl_label = "Save"
     bl_options = {"REGISTER", "UNDO"}
 
     @classmethod
@@ -62,16 +62,14 @@ class TLA_OT_operator(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-
-        self.report({'INFO'},
-            f"execute()")
         SaveColorSpaces(self, context)
+        self.report({'INFO'}, f"Colorspaces saved")
         return {'FINISHED'}
     
-class TLA_OT_operator2(Operator):
-    """ tooltip goes here """
-    bl_idname = "demo.operator2"
-    bl_label = "I'm a Skeleton Operator2"
+class Load_operator(Operator):
+    """ Load colorspaces in ACES """
+    bl_idname = "load.operator"
+    bl_label = "Load"
     bl_options = {"REGISTER", "UNDO"}
 
     @classmethod
@@ -79,30 +77,27 @@ class TLA_OT_operator2(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-
-        self.report({'INFO'},
-            f"execute2()")
         LoadColorSpaces(self, context)
+        self.report({'INFO'}, f"Colorspaces loaded in ACES")
         return {'FINISHED'}
 
 
-class TLA_PT_sidebar(Panel):
-    """Display test button"""
-    bl_label = "TLA"
+class sidebar(Panel):
+    bl_label = "ACES Converter"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "TLA"
+    bl_category = "Tool"
 
     def draw(self, context):
         col = self.layout.column(align=True)
-        prop = col.operator(TLA_OT_operator.bl_idname, text="Say Something")
-        prop2 = col.operator(TLA_OT_operator2.bl_idname, text="Say Something2")
+        prop = col.operator(Save_operator.bl_idname, text="Save")
+        prop2 = col.operator(Load_operator.bl_idname, text="Load")
 
  
 classes = [
-    TLA_OT_operator,
-    TLA_OT_operator2,
-    TLA_PT_sidebar,
+    Save_operator,
+    Load_operator,
+    sidebar,
 ]
 
 def register():
