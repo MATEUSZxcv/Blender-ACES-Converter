@@ -16,30 +16,22 @@ import os
 from bpy.types import Operator
 from bpy.types import Panel
 
-def Function1(self, context):
-    #getting blendfile directory
+def SaveColorSpaces(self, context):
+
     filepath = bpy.data.filepath
     directory = os.path.dirname(filepath)
-    print(directory)
+    tmp_path = os.path.join( directory , "ACES-Converter_tmp.txt")
 
-    tmp_path = os.path.join( directory , "tmp.txt")
-
-    #creating file
-    f=open(tmp_path,'a')
-    f.close()
-    #openig file
-    f=open(tmp_path,'r+')
+    f=open(tmp_path,'w')
         
-    f.write("1\n")
     for m in bpy.data.images:
         f.write(m.colorspace_settings.name+"\n")
     f.close()
         
-def Function2(self, context):
+def LoadColorSpaces(self, context):
     filepath = bpy.data.filepath
     directory = os.path.dirname(filepath)
-    print(directory)
-    tmp_path = os.path.join( directory , "tmp.txt")
+    tmp_path = os.path.join( directory , "ACES-Converter_tmp.txt")
     
     f=open(tmp_path, 'r')
     color = f.read().splitlines()
@@ -57,9 +49,6 @@ def Function2(self, context):
         i = i+1
         
     f.close()
-    #deleting file
-    f=open(tmp_path,'w')
-    f.close()
     os.remove(tmp_path)
 
 class TLA_OT_operator(Operator):
@@ -76,7 +65,7 @@ class TLA_OT_operator(Operator):
 
         self.report({'INFO'},
             f"execute()")
-        Function1(self, context)
+        SaveColorSpaces(self, context)
         return {'FINISHED'}
     
 class TLA_OT_operator2(Operator):
@@ -93,7 +82,7 @@ class TLA_OT_operator2(Operator):
 
         self.report({'INFO'},
             f"execute2()")
-        Function2(self, context)
+        LoadColorSpaces(self, context)
         return {'FINISHED'}
 
 
