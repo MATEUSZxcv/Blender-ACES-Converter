@@ -2,7 +2,7 @@
 
 ### What it does?
 
-Converts **all** textures' color spaces to ACES counterparts. By default it works with [Blender-ACES-Config](https://github.com/Ginurx/Blender-ACES-Config/tree/main) by *Ginurx*, but can be easily [modified](#modifying) to work with any other one (or simply batch change colorspaces, ACES not required).
+Converts **all** textures' color spaces to their ACES counterparts. By default, it works with [Blender-ACES-Config](https://github.com/Ginurx/Blender-ACES-Config/tree/main) by *Ginurx* but can be easily [modified](#modifying) to work with any other one (or simply batch change color spaces, ACES not required).
 
 Before             |  After
 :-------------------------:|:-------------------------:
@@ -10,28 +10,28 @@ Before             |  After
 
 ### Where to find it?
 
-3D Viewport -> Sidepanel -> Tool -> ACES Converter
+3D Viewport -> Sidebar -> Tool -> ACES Converter
 
 <img width="75%" src="images/location.png">
 
 
 ### How to use?
 
-1. Open blend file with **default** color managment
-2. Click *`Save`* button
-3. Close blender and change color config
-4. Reopen blend ifle and click *`Load`* button
+1. Open a blend file with **default** color management
+2. Click the *`Save`* button
+3. Close Blender and change color config
+4. Reopen the blend file and click the *`Load`* button
 
 ## Extras
 
 ### How it works?
 
-- when *`export`* is clicked script goes through all textures inside current blend file and saves name of colorspace for each one into `tmp.txt`
-- After changing OCIO config (and thus available colorspaces) the previous ones may not exist anymore, so when *`import`* is clicked all colorspaces are set to the ones defined in the script (following the same order from `tmp.txt`).
+- *`save`* writes the name of the current color space for each texture into `ACES-Converter_tmp.txt`
+- *`load`* reads every color space from `ACES-Converter_tmp.txt` and sets a new one accordingly (based on definitions inside `Blender-ACES-Converter.py`)
 
 ### Modifying
 
-If you want to use it for other colorspaces (it will be implemented in UI, some day...) then simply change these lines in `script.py`:
+If you want to use it for other colorspaces (it will be implemented in UI, someday...) then simply change these lines in `Blender-ACES-Converter.py`:
   
 ```py
 58            if color[i] == "sRGB":
